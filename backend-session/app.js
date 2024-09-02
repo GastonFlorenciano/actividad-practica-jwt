@@ -4,8 +4,7 @@ import session from 'express-session';
 import morgan from 'morgan';
 import path from 'path';
 import authRoutes from './routes/auth.routes.js';
-
-import { conexionDB }  from './db/database.js';
+import { SECRET_KEY } from './config.js';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -25,7 +24,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: 'mi_secreto',
+    secret: SECRET_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: { 

@@ -2,6 +2,15 @@ import { conexionDB } from '../db/database.js';
 
 const ctrl = {};
 
+ctrl.getUsers = async (req, res) => {
+
+    const connection = await conexionDB();
+
+    const [users] = await connection.execute('SELECT * FROM users');
+    res.json(users);
+
+}
+
 ctrl.login = async (req, res) => {
 
     const connection = await conexionDB();
@@ -10,7 +19,8 @@ ctrl.login = async (req, res) => {
 
     // Buscar usuario
     // const user = database.user.find(u => u.username === username && u.password === password);
-    const user = await connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
+    const [user] = await connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
+    console.log(user);
 
     if (user) {
         // Guardar información del usuario en la sesión
