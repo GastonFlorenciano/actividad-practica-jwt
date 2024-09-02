@@ -22,14 +22,14 @@ ctrl.login = async (req, res) => {
     const [user] = await connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
     console.log(user);
 
-    if (user) {
+    if (user.length > 0) {
         // Guardar información del usuario en la sesión
-        req.session.userId = user.id;
-        req.session.username = user.username;
+        req.session.userId = user[0].id;
+        req.session.username = user[0].username;
 
         return res.json({
             message: 'Inicio de sesión exitoso',
-            user: { id: user.id, username: user.username }
+            user: { id: user[0].id, username: user[0].username }
         });
     } else {
         return res.status(401).json({ message: 'Credenciales incorrectas' });
