@@ -13,15 +13,15 @@ ctrl.login = async (req, res) => {
       "SELECT * FROM users WHERE username = ? AND password = ?",
       [username, password]
     );
-    console.log(user);
+    // console.log(user);
 
-    // Validación de usuario
-    if (user.length === 0) {
-      return res.status(401).json({ message: "Credenciales incorrectas" });
-    }
+    // // Validación de usuario
+    // if (user.length === 0) {
+    //   return res.status(401).json({ message: "Credenciales incorrectas" });
+    // }
 
     // Generar token JWT
-    const token = await generarJwt(user.id);
+    const token = await generarJwt(user[0].id);
 
     // Almacenar el token en la sesión del servidor
     req.session.token = token;
