@@ -48,21 +48,14 @@ ctrl.register = async (req, res) => {
 
     console.log(user);
 
-    if (user.length === 0) {
-        
-        return res.status(401).json({ message: 'Datos faltantes' });
+    req.session.userId = user[0].id;
+    req.session.username = user[0].username;
 
-    } else {
+    return res.json({
+        message: 'Usuario registrado exitosamente',
+        user: { id: user[0].id, username: user[0].username }
+    });
 
-        req.session.userId = user[0].id;
-        req.session.username = user[0].username;
-
-        return res.json({
-            message: 'Usuario registrado exitosamente',
-            user: { id: user[0].id, username: user[0].username }
-        });
-
-    }
 };
 
 ctrl.session = async (req, res) => {
@@ -77,14 +70,14 @@ ctrl.session = async (req, res) => {
 };
 
 ctrl.logout = async (req, res) => {
-        console.log(req.session)
-        req.session.destroy(err => {
-            if (err) {
-                return res.status(500).json({ message: 'Error al cerrar la sesión' });
-            }
-            res.clearCookie('connect.sid'); // Nombre de cookie por defecto para express-session
-            return res.json({ message: 'Sesión cerrada exitosamente' });
-        });
-    };
+    console.log(req.session)
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ message: 'Error al cerrar la sesión' });
+        }
+        res.clearCookie('connect.sid'); // Nombre de cookie por defecto para express-session
+        return res.json({ message: 'Sesión cerrada exitosamente' });
+    });
+};
 
 export default ctrl;
