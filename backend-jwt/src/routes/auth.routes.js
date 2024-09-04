@@ -5,6 +5,7 @@ import validarJwt  from '../middlewares/validar-jwt.js';
 const router = Router();
 
 router.post('/login', ctrl.login);
+router.post('/register', ctrl.register);
 router.get('/session', validarJwt, ctrl.session);
 router.post('/logout', ctrl.logout);
 
