@@ -13,12 +13,6 @@ ctrl.login = async (req, res) => {
       "SELECT * FROM users WHERE username = ? AND password = ?",
       [username, password]
     );
-    // console.log(user);
-
-    // // Validación de usuario
-    // if (user.length === 0) {
-    //   return res.status(401).json({ message: "Credenciales incorrectas" });
-    // }
 
     // Generar token JWT
     const token = await generarJwt(user[0].id);
@@ -36,7 +30,7 @@ ctrl.login = async (req, res) => {
     return res.json({ message: "Inicio de sesión exitoso" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Error Inesperado" });
+    return res.status(500).json({ message: "Datos erroneos" });
   }
 };
 
@@ -54,11 +48,6 @@ ctrl.register = async (req, res) => {
       [username, password]
     );
     console.log(user);
-
-    // Validación de usuario
-    if (user.length === 0) {
-      return res.status(401).json({ message: "Datos faltantes" });
-    }
 
     // Generar token JWT
     const token = await generarJwt(user.id);
