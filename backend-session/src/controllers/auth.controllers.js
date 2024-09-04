@@ -23,7 +23,7 @@ ctrl.login = async (req, res) => {
     console.log(user);
 
     if (user.length > 0) {
-        // Guardar información del usuario en la sesión
+
         req.session.userId = user[0].id;
         req.session.username = user[0].username;
 
@@ -33,6 +33,35 @@ ctrl.login = async (req, res) => {
         });
     } else {
         return res.status(401).json({ message: 'Credenciales incorrectas' });
+    }
+};
+
+ctrl.register = async (req, res) => {
+
+    const connection = await conexionDB();
+
+    const { username, password } = req.body;
+
+    await connection.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password]);
+
+    const [user] = await connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
+
+    console.log(user);
+
+    if (user.length === 0) {
+        
+        return res.status(401).json({ message: 'Datos faltantes' });
+
+    } else {
+
+        req.session.userId = user[0].id;
+        req.session.username = user[0].username;
+
+        return res.json({
+            message: 'Usuario registrado exitosamente',
+            user: { id: user[0].id, username: user[0].username }
+        });
+
     }
 };
 
