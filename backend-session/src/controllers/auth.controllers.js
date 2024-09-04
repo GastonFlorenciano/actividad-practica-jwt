@@ -13,16 +13,14 @@ ctrl.getUsers = async (req, res) => {
 
 ctrl.login = async (req, res) => {
 
-    const connection = await conexionDB();
-
     const { username, password } = req.body;
 
-    // Buscar usuario
-    // const user = database.user.find(u => u.username === username && u.password === password);
-    const [user] = await connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
-    console.log(user);
+    try {
+        const connection = await conexionDB();
 
-    if (user.length > 0) {
+        const [user] = await connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
+        console.log(user);
+
 
         req.session.userId = user[0].id;
         req.session.username = user[0].username;
@@ -31,7 +29,8 @@ ctrl.login = async (req, res) => {
             message: 'Inicio de sesión exitoso',
             user: { id: user[0].id, username: user[0].username }
         });
-    } else {
+
+    }catch (error) {
         return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 };
