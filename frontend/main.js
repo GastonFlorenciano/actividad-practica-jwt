@@ -23,10 +23,51 @@ document.getElementById('logout').addEventListener('click', async () => {
         method: 'POST',
         credentials: 'include'
     })
-    
+
     if (!response.ok) {
         throw new Error('Error al cerrar sesión');
     } else {
-        window.location.href = 'index.html';
+        history.replaceState(null, null, 'index.html');
+        window.location.replace('index.html');
     }
 });
+
+document.querySelector('#register').addEventListener('click', async () => {
+
+console.log('llegue aca');
+
+try{
+
+const response = await fetch('http://localhost:4000/register', {
+
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+    }),
+    credentials: 'include'
+
+
+})
+
+console.log(response);
+
+if (!response.ok) {
+    alert('Credenciales inválidas');
+    divError.classList.add('bg-danger', 'text-white', 'text-center', 'rounded', 'p-2', 'mt-3');
+
+    setTimeout(() => {
+        divError.hidden = true;
+    }, 3500);
+
+    return;
+}
+}
+catch{
+    console.log('error');
+}
+
+})
